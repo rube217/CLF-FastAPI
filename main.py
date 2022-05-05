@@ -11,7 +11,7 @@ from fastapi import FastAPI, Query, Body, Path
 #from fastapi import Body
 #from fastapi import Query
 
-SQL_
+
 app = FastAPI()
 
 #Models
