@@ -5,24 +5,6 @@ import pydantic
 from typing import List, Optional
 
 
-class PostBase(pydantic.BaseModel):
-
-    title:str
-    content: str
-
-
-class PostCreate(PostBase):
-    pass 
-
-class Post(PostBase):
-    id: int
-    owner_id: int
-    date_created: dt.datetime
-    date_last_updated: dt.datetime
-
-    class Config:
-        orm_mode = True
-
 class UserBase(pydantic.BaseModel):
     email: str
 
