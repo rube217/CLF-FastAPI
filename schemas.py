@@ -3,6 +3,7 @@ from optparse import Option
 from turtle import title
 import pydantic
 from typing import List, Optional
+import datetime as dt
 
 
 class UserBase(pydantic.BaseModel):
@@ -20,10 +21,12 @@ class UserCreate(UserBase):
         min_length=1,
         max_length=75
     )
+    birth_date: Optional[dt.date] = dt.date.today()
 
 class User(UserBase):
     id: int
-    type_id_document: str
+    identification_number: str
+    type_id: str
     weight: Optional[float] = 0.0
     is_active: bool
     is_teacher: Optional[bool] = False
@@ -31,13 +34,10 @@ class User(UserBase):
     contact_number: Optional[str] = ''
     contact_person: Optional[str] = ''
     school: int
-    age: int
+    #events: int #List[Event] = []
 
     class Config:
         orm_mode = True
-        
-
-
 
 
 class School(pydantic.BaseModel):
@@ -56,8 +56,52 @@ class School(pydantic.BaseModel):
         orm_mode = True
 
 
+class Items(pydantic.BaseModel):
+    id:int
+    item_name:str
+    item_description: Optional[str]=None
+    item_cost: int
 
-# class Person(BaseModel):
+    class Config:
+        orm_mode = True
+
+
+class Categories(pydantic.BaseModel):
+    id:int
+    is_group: Optional[bool] = False
+    min_level: Optional[int] = 0
+    max_level: Optional[int] = 12
+    min_weight: Optional[float] = 0.0 
+    max_weight: Optional[float] = 0.0 
+    form_category: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+class Event(pydantic.BaseModel):
+    id: int
+    category : List[Categories] = []
+    date_event: Optional[dt.date] = dt.date.today()
+    cost: Optional[int]=0
+    #competitor: List[User] = []
+
+    class Config:
+        orm_mode = True
+
+
+class Boughts(pydantic.BaseModel):
+   date:dt.date
+   id:int
+   item:int
+   buyer:int
+
+class Competitors(pydantic.BaseModel):
+    id: int
+    id_event: int
+    id_competitor: int
+    id_category: int
+
+# class Person(pydantic.BaseModel):
 #     first_name: str = Field(
 #         ...,
 #         min_length=1,           ## Se valida los atributos del modelo
@@ -96,33 +140,11 @@ class School(pydantic.BaseModel):
 #         }
 
 
-# class School(BaseModel):
+# class School(pydantic.BaseModel):
 #     teacher_id: int
 #     school_id: int
 #     school_name: str
 #     address: str
 #     contact_number_school: str
 
-# class Event(BaseModel):
-#     event_id: int
-#     category : int
-#     date_event: date
-#     cost: Optional[int]=0
 
-# #class boughts(BaseModel):
-# #    date_bought:date
-# #    bought_id:int
-# #    item:int
-
-# class Items(BaseModel):
-#     item_id:int
-#     item_name:str
-#     item_description: Optional[str]=None
-#     item_cost: int
-
-# class Categories(BaseModel):
-#     category_id:int
-#     is_group: Optional[bool] = False
-#     allowed_levels: Optional[list] = []
-#     allowed_weight: Optional[list] = [] 
-#     form_category: Optional[str] = None

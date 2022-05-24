@@ -1,3 +1,4 @@
+from difflib import IS_CHARACTER_JUNK
 import email
 import fastapi
 import sqlalchemy.orm as orm
@@ -18,11 +19,32 @@ def get_user_by_email(db: orm.Session, email:str):
 
 def create_user(db: orm.Session, user: schemas.UserCreate):
     hashed_password = user.password + "this_is_not_secure"
-    db_user = models.User(email= user.email, hashed_password = hashed_password)
+    db_user = models.User(
+        email= user.email,
+        hashed_password = hashed_password,
+        first_name = user.first_name,
+        birth_date = user.birth_date)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
     return db_user
+
+# def update_user(db: orm.Session, user: schemas.User):
+#     db_user = models.User(
+#         identification_number = user.identification_number,
+#         type_id = user.type_id,
+#         weight = user.weight,
+#         is_active = user.is_active,
+
+#         is_teacher = user.is_teacher,
+#         level = user.level,
+#         contact_number = user.contact_number,
+#         contact_person = user.contact_person,
+#         school = user.school)
+#     db.add(db_user)
+#     db.commit()
+#     db.refresh(db_user)
+#     return db_user
 
 def get_school_by_email(db: orm.Session, email:str):
     return db.query(models.School).filter(models.School.email == email).first()
