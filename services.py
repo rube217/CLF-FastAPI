@@ -14,16 +14,21 @@ def get_db():
     finally:
         db.close()
 
-def get_user_by_email(db: orm.Session, email:str):
+def get_user_by_email(db: orm.Session, email:str =""):
     return db.query(models.User).filter(models.User.email == email).first()
 
-def create_user(db: orm.Session, user: schemas.UserCreate):
+def create_user(db: orm.Session, user: schemas.User):
     hashed_password = user.password + "this_is_not_secure"
     db_user = models.User(
         email= user.email,
         hashed_password = hashed_password,
         first_name = user.first_name,
-        birth_date = user.birth_date)
+        birth_date = user.birth_date,
+        identification = user.identification_number,
+        level = user.level,
+        type_id = user.type_id,
+        weight = user.weight,
+        )
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -50,8 +55,13 @@ def get_school_by_email(db: orm.Session, email:str):
     return db.query(models.School).filter(models.School.email == email).first()
 
 def create_school(db: orm.Session, school: schemas.School):
-    #hashed_password = user.password + "this_is_not_secure"
-    db_school = models.User(email= school.email, school_name = school.school_name)#hashed_password = hashed_password)
+
+    db_school = models.User(
+        email = school.email,
+        school_name = school.school_name,
+        address = school.address,
+        contact_school = school.contact_number_school,
+        teacher = school.teacher_id)
     db.add(db_school)
     db.commit()
     db.refresh(db_school)

@@ -24,8 +24,7 @@ def home():
     return "Aqui va el FrontEnd!!!"
 
 @app.post("/users/new",response_model=schemas.User)
-
-def create_user(user: schemas.UserCreate, db: orm.Session = fastapi.Depends(services.get_db)):
+def create_user(user: schemas.User, db: orm.Session = fastapi.Depends(services.get_db)):
     db_user = services.get_user_by_email(db = db, email=user.email)
     if db_user:
         raise fastapi.HTTPException(status_code=400, detail="woops the email is in use")
@@ -33,15 +32,23 @@ def create_user(user: schemas.UserCreate, db: orm.Session = fastapi.Depends(serv
 
 
 @app.post("/schools/new",response_model=schemas.School)
-
 def create_school(school: schemas.School, db: orm.Session = fastapi.Depends(services.get_db)):
     db_school = services.get_school_by_email(db = db, email=school.email)
     if db_school:
         raise fastapi.HTTPException(status_code=400, detail="woops the email is in use")
     return services.create_school(db=db, school=school)
 
+@app.post("/events/new",response_model=schemas.Event)
+def create_event(school: schemas.Event, db: orm.Session = fastapi.Depends(services.get_db)):
+    db_school = services.get_school_by_email(db = db, email=school.email)
+    if db_school:
+        raise fastapi.HTTPException(status_code=400, detail="woops the email is in use")
+    return services.create_school(db=db, school=school)
 
 
+@app.get("/users/detail")
+def show_users():
+    return services.get_user_by_email()
 #Models
 
 

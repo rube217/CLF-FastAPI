@@ -47,7 +47,7 @@ class Event(db.Base):
     cost = sql.Column(sql.Integer)
 
     #category = sql.Column(sql.Integer)
-    competitors = sql.orm.relationship("User", back_populates = "events")
+    #competitors = sql.orm.relationship("User", back_populates = "events")
 
 class Items(db.Base):
     __tablename__ = "items"
